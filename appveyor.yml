@@ -8,10 +8,11 @@ stack: python 3.10
 
 environment:
   GITHUB_TOKEN:
-    secure: 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
+    secure: ${{ secrets.TOKEN }}
 
 install:
 - pip install -r requirements.txt
+- pip install pyinstaller
 
 build_script:
 - flet pack main.py --name convWebp --product-name convWebp --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
