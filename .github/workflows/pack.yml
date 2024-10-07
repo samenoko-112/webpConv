@@ -1,0 +1,75 @@
+name: Build and Release Flet App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Package the app
+        run: |
+          REPO_NAME=${{ github.repository }}
+          flet pack main.py --name $REPO_NAME --product-name $REPO_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
+
+      - name: Create ZIP for Windows
+        run: |
+          cd dist
+          zip -r ${REPO_NAME}-Windows.zip ${REPO_NAME}.exe
+
+      - name: Upload Windows Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: v1.0.0
+          files: |
+            dist/${REPO_NAME}-Windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-mac:
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10.9'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Package the app
+        run: |
+          REPO_NAME=${{ github.repository }}
+          flet pack main.py --name $REPO_NAME --product-name $REPO_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
+
+      - name: Create ZIP for macOS
+        run: |
+          cd dist
+          zip -r ${REPO_NAME}-macOS.zip ${REPO_NAME}.app
+
+      - name: Upload macOS Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: v1.0.0
+          files: |
+            dist/${REPO_NAME}-macOS.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
