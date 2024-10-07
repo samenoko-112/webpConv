@@ -23,20 +23,20 @@ jobs:
 
       - name: Package the app
         run: |
-          REPO_NAME=${{ github.repository }}
-          flet pack main.py --name $REPO_NAME --product-name $REPO_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
+          APP_NAME="convWebp"  # 固定のアプリケーション名
+          flet pack main.py --name $APP_NAME --product-name $APP_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
 
       - name: Create ZIP for Windows
         run: |
           cd dist
-          zip -r ${REPO_NAME}-Windows.zip ${REPO_NAME}.exe
+          zip -r ${APP_NAME}-Windows.zip ${APP_NAME}.exe
 
       - name: Upload Windows Release
         uses: softprops/action-gh-release@v1
         with:
           tag: v1.0.0
           files: |
-            dist/${REPO_NAME}-Windows.zip
+            dist/${APP_NAME}-Windows.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -57,19 +57,19 @@ jobs:
 
       - name: Package the app
         run: |
-          REPO_NAME=${{ github.repository }}
-          flet pack main.py --name $REPO_NAME --product-name $REPO_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
+          APP_NAME="convWebp"  # 固定のアプリケーション名
+          flet pack main.py --name $APP_NAME --product-name $APP_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
 
       - name: Create ZIP for macOS
         run: |
           cd dist
-          zip -r ${REPO_NAME}-macOS.zip ${REPO_NAME}.app
+          zip -r ${APP_NAME}-macOS.zip ${APP_NAME}.app
 
       - name: Upload macOS Release
         uses: softprops/action-gh-release@v1
         with:
           tag: v1.0.0
           files: |
-            dist/${REPO_NAME}-macOS.zip
+            dist/${APP_NAME}-macOS.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
