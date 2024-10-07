@@ -9,6 +9,7 @@ env:
   APP_NAME: "convWebp"  # グローバルなアプリ名
 
 jobs:
+
   build-windows:
     runs-on: windows-latest
     steps:
@@ -21,16 +22,18 @@ jobs:
 
       - name: Package the app
         run: |
-          flet pack main.py --name $APP_NAME --product-name $APP_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
+          flet pack main.py --name "%APP_NAME%" --product-name "%APP_NAME%" --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
 
       - name: Create ZIP for Windows
         run: |
           cd dist
-          zip -r "${APP_NAME}-Windows.zip" "${APP_NAME}.exe"
+          zip -r "%APP_NAME%-Windows.zip" "%APP_NAME%.exe"
 
       - name: Upload Windows Release using gh
         run: |
-          gh release create v1.0.0 "${APP_NAME}-Windows.zip" --title "Release v1.0.0" --notes "First release of ${APP_NAME} for Windows."
+          echo "Checking if %APP_NAME%-Windows.zip exists"
+          ls dist  # distフォルダー内のファイルをリスト表示
+          gh release create v1.0.0 "%APP_NAME%-Windows.zip" --title "Release v1.0.0" --notes "First release of %APP_NAME% for Windows."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -46,15 +49,17 @@ jobs:
 
       - name: Package the app
         run: |
-          flet pack main.py --name $APP_NAME --product-name $APP_NAME --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
+          flet pack main.py --name "$APP_NAME" --product-name "$APP_NAME" --product-version "1.0" --copyright "Copyright (c) 2024 samenoko"
 
       - name: Create ZIP for macOS
         run: |
           cd dist
-          zip -r "${APP_NAME}-macOS.zip" "${APP_NAME}.app"
+          zip -r "$APP_NAME-macOS.zip" "$APP_NAME.app"
 
       - name: Upload macOS Release using gh
         run: |
-          gh release create v1.0.0 "${APP_NAME}-macOS.zip" --title "Release v1.0.0" --notes "First release of ${APP_NAME} for macOS."
+          echo "Checking if $APP_NAME-macOS.zip exists"
+          ls dist  # distフォルダー内のファイルをリスト表示
+          gh release create v1.0.0 "$APP_NAME-macOS.zip" --title "Release v1.0.0" --notes "First release of $APP_NAME for macOS."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
